@@ -22,11 +22,21 @@ namespace Infrastructure.Services
             Subscribe();
         }
 
+        public GameStep GetChangedStep()
+        {
+            return _step == GameStep.Circle ? GameStep.Cross : GameStep.Circle;
+        }
+
+        private void ChangeStep()
+        {
+            _step = GetChangedStep();
+        }
+
         public void ResetStep()
         {
             _step = GameStep.Cross;
         }
-        
+
         public void Read(Progress progress)
         {
             _step = (GameStep) progress.Step;
@@ -56,11 +66,6 @@ namespace Infrastructure.Services
                 ChangeStep();
                 _changesParser.Refresh();
             }
-        }
-
-        private void ChangeStep()
-        {
-            _step = _step == GameStep.Circle ? GameStep.Cross : GameStep.Circle;
         }
     }
 }

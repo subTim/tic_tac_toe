@@ -21,7 +21,7 @@ namespace Infrastructure.GameState
         public void Enter()
         {
             _factory.WinScreen.gameObject.SetActive(true);
-            _factory.WinScreen.WinFrom.text = $"{_statusService.Step.ToString()} Won!" ;
+            _factory.WinScreen.WinFrom.text = $"{_statusService.GetChangedStep()} Won!" ;
             _factory.WinScreen.RestartButton.onClick.AddListener( _restarter.Restart);
         }
         

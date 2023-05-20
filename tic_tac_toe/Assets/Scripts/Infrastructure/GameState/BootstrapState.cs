@@ -37,9 +37,7 @@ namespace Infrastructure.GameState
             _serviceLocator.RegisterSingle<InputService>(new InputService());
             InitLooseWinSystem();
             _serviceLocator.RegisterSingle<GameStatusService>(new GameStatusService(_serviceLocator.Single<InputService>(), _serviceLocator.Single<FieldChangesParser>()));
-            _serviceLocator.RegisterSingle<Restarter>(new Restarter(_machine, _serviceLocator.Single<IGameFactory>(), _serviceLocator.Single<GameStatusService>(), 
-                _serviceLocator.Single<SaveLoadService>()));
-            
+            _serviceLocator.RegisterSingle<Restarter>(new Restarter(_machine, _serviceLocator.Single<IGameFactory>(), _serviceLocator.Single<GameStatusService>()));
             _serviceLocator.RegisterSingle(_machine);
             _updater.Register(_serviceLocator.Single<InputService>());
             _serviceLocator.RegisterSingle<SaveLoadService>(new SaveLoadService(new Progress()));
