@@ -10,12 +10,19 @@ namespace Infrastructure.Services
         private readonly FieldChangesParser _changesParser;
         private GameStep _step;
 
+        public GameStep Step => _step;
+
         public GameStatusService(InputService inputService, FieldChangesParser changesParser)
         {
             _inputService = inputService;
             _changesParser = changesParser;
             
             Subscribe();
+        }
+
+        public void ResetStep()
+        {
+            _step = GameStep.Cross;
         }
 
         private void Subscribe()

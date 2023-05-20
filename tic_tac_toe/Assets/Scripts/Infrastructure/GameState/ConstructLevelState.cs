@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using GamePlay;
 using Infrastructure.Factory;
 using Infrastructure.Services;
 using UnityEngine.UI;
@@ -21,8 +23,19 @@ namespace Infrastructure.GameState
 
         private void Construct()
         {
-            _serviceLocator.Single<InputService>().Construct(
-                _serviceLocator.Single<IGameFactory>().CreateField().GetComponent<GraphicRaycaster>());
+            IGameFactory gameFactory = _serviceLocator.Single<IGameFactory>(); 
+            _serviceLocator.Single<InputService>().Construct(gameFactory.CreateField().GetComponent<GraphicRaycaster>());
+            gameFactory.CreateScreens();
+            
+            ConfigureWinLooseSystem();
+        }
+        
+        private void ConfigureWinLooseSystem()
+        {
+            List<GameCell> cells = _serviceLocator.Single<IGameFactory>().Cells;
+
+            _serviceLocator.Single<Winner>().Construct(cells);            
+            _serviceLocator.Single<Looser>().Construct(cells);
         }
     }
 }

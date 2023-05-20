@@ -1,24 +1,31 @@
 using System.Collections.Generic;
+using GamePlay.Cells;
 using Infrastructure;
 using Infrastructure.GameState;
+using Infrastructure.Services;
+using UnityEngine;
 
 namespace GamePlay
 {
-    public class Winner
+    public class Winner : IService
     {
-        private readonly List<GameCell> _cells;
         private readonly GlobalStateMachine _machine;
+        private List<GameCell> _cells;
+ 
+        public Winner(GlobalStateMachine machine)
+        {
+            _machine = machine;
+        }
 
-        public Winner(List<GameCell> cells, GlobalStateMachine machine)
+        public void Construct(List<GameCell> cells)
         {
             _cells = cells;
-            _machine = machine;
         }
 
         public bool TryWin()
         {
-            TryHorizontal();
             TryVertical();
+            TryHorizontal();
             TryCross();
 
             return _machine.CompareState<WinState>();
@@ -32,37 +39,44 @@ namespace GamePlay
 
         private bool LeftDiagonalFulled()
         {
-            return IsEmpty(0) && _cells[0].Status == _cells[4].Status == _cells[8].Status;
+            return IsNotEmpty(0) && IsValidCells(0, 4);
         }
         
         private bool RightDiagonalFulled()
         {
-            return IsEmpty(2) && _cells[2].Status == _cells[4].Status == _cells[6].Status;
-        }
-
-        private void TryVertical()
-        {
-            for (int i = 0; i < Constants.FIELD_SIDE_CAPACITY; i += 3)
-            {
-                if (IsEmpty(i) && _cells[i].Status == _cells[i + 1].Status == _cells[i + 2].Status)
-                    Win();
-            }
-        }
-
-        private bool IsEmpty(int item)
-        {
-            return _cells[item].Status == CellType.Empty;
+            return IsNotEmpty(2) && IsValidCells(2, 2);;
         }
 
         private void TryHorizontal()
         {
-            for (int i = 0; i < Constants.FIELD_SIDE_CAPACITY; i++)
+            for (int i = 0, j = 0; i < Constants.FIELD_SIDE_CAPACITY; i ++, j += 3)
             {
-                if (IsEmpty(i) && _cells[i].Status == _cells[i + 3].Status == _cells[i + 6].Status)
+                if (IsNotEmpty(j) && IsValidCells(j, 1))
                     Win();
             }
         }
 
+        private bool IsNotEmpty(int item)
+        {
+            return _cells[item].Status != CellStatus.Empty;
+        }
+
+        private void TryVertical()
+        {
+            for (int i = 0; i < Constants.FIELD_SIDE_CAPACITY; i++)
+            {
+                if (IsNotEmpty(i) && IsValidCells(i, 3))
+                    Win();
+            }
+        }
+
+        private bool IsValidCells(int startIndex, int increaseStep)
+        {
+            var startCell = _cells[startIndex].Status;
+            
+            return startCell == _cells[startIndex + increaseStep].Status &&
+                   startCell == _cells[startIndex + increaseStep * 2].Status;
+        }
         private void Win()
         {
             _machine.SetState<WinState>();

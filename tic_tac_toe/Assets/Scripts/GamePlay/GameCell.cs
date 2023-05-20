@@ -20,6 +20,12 @@ namespace GamePlay
             UpdateViewStatus();
         }
 
+        public void SetStatus(CellStatus status)
+        {
+            _status = status;
+            UpdateViewStatus();
+        }
+
         public void OnTap(GameStep status)
         {
             switch (status)

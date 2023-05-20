@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using DefaultNamespace;
 using GamePlay;
 using Infrastructure.Services;
 using UnityEngine;
@@ -12,6 +13,8 @@ namespace Infrastructure.Factory
         private readonly AssetsProvider _assetsProvider;
 
         public List<GameCell> Cells { get; set;}
+        public WinScreen WinScreen { get; set; }
+        public LooseScreen LooseScreen { get; set; }
 
         public GameFactory(ServiceLocator serviceLocator)
         {
@@ -24,6 +27,13 @@ namespace Infrastructure.Factory
             var gameBoard = _assetsProvider.Instantiate(AssetsPath.GAME_BOARD);
             InitCells(gameBoard);
             return gameBoard;
+        }
+
+        public void CreateScreens()
+        {
+            LooseScreen = _assetsProvider.Instantiate(AssetsPath.LOOSE_SCREEN, false).GetComponent<LooseScreen>();
+            WinScreen = _assetsProvider.Instantiate(AssetsPath.WIN_SCREEN, false).GetComponentInChildren<WinScreen>();
+            Debug.Log(WinScreen);
         }
 
         private void InitCells(GameObject gameBoard)

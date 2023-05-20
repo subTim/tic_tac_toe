@@ -37,20 +37,33 @@ namespace Infrastructure.GameState
             _serviceLocator.RegisterSingle<AssetsProvider>(new AssetsProvider());
             _serviceLocator.RegisterSingle<IGameFactory>(new GameFactory(_serviceLocator));
             _serviceLocator.RegisterSingle<InputService>(new InputService());
-            ConfigureWinLooseSystem();
+            InitLooseWinSystem();
             _serviceLocator.RegisterSingle<GameStatusService>(new GameStatusService(_serviceLocator.Single<InputService>(), _serviceLocator.Single<FieldChangesParser>()));
+            _serviceLocator.RegisterSingle<Restarter>(new Restarter(_machine, _serviceLocator.Single<IGameFactory>(), _serviceLocator.Single<GameStatusService>()));
             _serviceLocator.RegisterSingle(_machine);
             _updater.Register(_serviceLocator.Single<InputService>());
+            CreateWinState();
+            CreateLooseState();
         }
 
-        private void ConfigureWinLooseSystem()
+        private void InitLooseWinSystem()
         {
-            List<GameCell> cells = _serviceLocator.Single<IGameFactory>().Cells;
+            _serviceLocator.RegisterSingle<Winner>(new Winner(_machine));
+            _serviceLocator.RegisterSingle<Looser>(new Looser(_machine));
+            _serviceLocator.RegisterSingle<FieldChangesParser>(new FieldChangesParser(
+                _serviceLocator.Single<Winner>(), _serviceLocator.Single<Looser>()));
+        }
+        
+        private void CreateWinState()
+        {
+            _machine.AddState(new WinState(ServiceLocator.Container.Single<Restarter>(),
+                ServiceLocator.Container.Single<IGameFactory>(), ServiceLocator.Container.Single<GameStatusService>()));
+        }
 
-            Winner winner = new Winner(cells, _machine);
-            Looser looser = new Looser(cells, _machine);
-            
-            _serviceLocator.RegisterSingle<FieldChangesParser>(new FieldChangesParser(winner, looser));
+        private void CreateLooseState()
+        {
+            _machine.AddState(new LooseState(ServiceLocator.Container.Single<Restarter>(),
+                ServiceLocator.Container.Single<IGameFactory>()));
         }
 
         private void SetNext()

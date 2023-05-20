@@ -2,20 +2,25 @@ using System.Collections.Generic;
 using System.Linq;
 using GamePlay.Cells;
 using Infrastructure.GameState;
+using Infrastructure.Services;
 
 namespace GamePlay
 {
-    public class Looser
+    public class Looser : IService
     {
-        private readonly List<GameCell> _cells;
         private readonly GlobalStateMachine _stateMachine;
+        private List<GameCell> _cells;
 
-        public Looser(List<GameCell> cells, GlobalStateMachine stateMachine)
+        public Looser(GlobalStateMachine stateMachine)
         {
-            _cells = cells;
             _stateMachine = stateMachine;
         }
-
+        
+        public void Construct(List<GameCell> cells)
+        {
+            _cells = cells;
+        }
+        
         public void TryLoose()
         {
             if (_cells.All(cell => cell.Status != CellStatus.Empty))

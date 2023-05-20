@@ -15,5 +15,13 @@ namespace UnityEngine
             var prefab = Resources.Load<GameObject>(path);
             return Object.Instantiate(prefab);
         }
+        
+        public GameObject Instantiate(string path, bool active)
+        {
+            var prefab = Resources.Load<GameObject>(path);
+            prefab.SetActive(active);
+            return Object.Instantiate(prefab);
+        }
+
     }
 }
