@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
+using Infrastructure;
 using Infrastructure.GameState;
-using Infrastructure.Services.Cells;
 
-namespace Infrastructure.Services
+namespace GamePlay
 {
     public class Winner
     {

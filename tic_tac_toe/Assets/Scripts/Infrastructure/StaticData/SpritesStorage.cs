@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Infrastructure.Services.Cells;
+using GamePlay.Cells;
 using UnityEngine;
 
 namespace Infrastructure.StaticData

@@ -1,4 +1,4 @@
-namespace Infrastructure.Services.Cells
+namespace GamePlay.Cells
 {
     public enum CellStatus
     {

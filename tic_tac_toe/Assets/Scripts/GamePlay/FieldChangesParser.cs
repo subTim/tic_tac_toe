@@ -1,8 +1,6 @@
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+using Infrastructure.Services;
 
-namespace Infrastructure.Services
+namespace GamePlay
 {
     public class FieldChangesParser : IService
     {

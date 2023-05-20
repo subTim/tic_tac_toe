@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using GamePlay;
 using Infrastructure.Factory;
 using Infrastructure.Scenes;
 using Infrastructure.Services;
@@ -35,9 +37,20 @@ namespace Infrastructure.GameState
             _serviceLocator.RegisterSingle<AssetsProvider>(new AssetsProvider());
             _serviceLocator.RegisterSingle<IGameFactory>(new GameFactory(_serviceLocator));
             _serviceLocator.RegisterSingle<InputService>(new InputService());
-            _serviceLocator.RegisterSingle<GameStatusService>(new GameStatusService(_serviceLocator.Single<InputService>()));
+            ConfigureWinLooseSystem();
+            _serviceLocator.RegisterSingle<GameStatusService>(new GameStatusService(_serviceLocator.Single<InputService>(), _serviceLocator.Single<FieldChangesParser>()));
             _serviceLocator.RegisterSingle(_machine);
             _updater.Register(_serviceLocator.Single<InputService>());
+        }
+
+        private void ConfigureWinLooseSystem()
+        {
+            List<GameCell> cells = _serviceLocator.Single<IGameFactory>().Cells;
+
+            Winner winner = new Winner(cells, _machine);
+            Looser looser = new Looser(cells, _machine);
+            
+            _serviceLocator.RegisterSingle<FieldChangesParser>(new FieldChangesParser(winner, looser));
         }
 
         private void SetNext()

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using GamePlay.Cells;
 using Infrastructure.GameState;
-using Infrastructure.Services.Cells;
 
-namespace Infrastructure.Services
+namespace GamePlay
 {
     public class Looser
     {

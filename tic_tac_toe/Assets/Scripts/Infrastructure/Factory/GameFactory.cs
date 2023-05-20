@@ -1,4 +1,6 @@
-using System.ComponentModel.Design;
+using System.Collections.Generic;
+using System.Linq;
+using GamePlay;
 using Infrastructure.Services;
 using UnityEngine;
 
@@ -8,6 +10,8 @@ namespace Infrastructure.Factory
     {
         private readonly StaticData.StaticData _staticData;
         private readonly AssetsProvider _assetsProvider;
+
+        public List<GameCell> Cells { get; set;}
 
         public GameFactory(ServiceLocator serviceLocator)
         {
@@ -24,9 +28,9 @@ namespace Infrastructure.Factory
 
         private void InitCells(GameObject gameBoard)
         {
-            var cells = gameBoard.GetComponentsInChildren<GameCell>();
+            Cells = gameBoard.GetComponentsInChildren<GameCell>().ToList();
 
-            foreach (var cell in cells)
+            foreach (var cell in Cells)
             {
                 cell.Construct(_staticData.Storage);
             }

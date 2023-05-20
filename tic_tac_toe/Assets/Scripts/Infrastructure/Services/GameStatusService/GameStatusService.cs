@@ -1,16 +1,20 @@
 using System;
-using Infrastructure.Services.Cells;
+using GamePlay;
+using GamePlay.Cells;
 
 namespace Infrastructure.Services
 {
     public class GameStatusService : IDisposable, IService
     {
         private readonly InputService _inputService;
+        private readonly FieldChangesParser _changesParser;
         private GameStep _step;
 
-        public GameStatusService(InputService inputService)
+        public GameStatusService(InputService inputService, FieldChangesParser changesParser)
         {
             _inputService = inputService;
+            _changesParser = changesParser;
+            
             Subscribe();
         }
 
@@ -30,6 +34,7 @@ namespace Infrastructure.Services
             {
                 cell.OnTap(_step);
                 ChangeStep();
+                _changesParser.Refresh();
             }
         }
 

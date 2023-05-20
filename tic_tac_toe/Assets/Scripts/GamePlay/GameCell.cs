@@ -1,9 +1,10 @@
-using Infrastructure.Services.Cells;
+using GamePlay.Cells;
+using Infrastructure.Services;
 using Infrastructure.StaticData;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Infrastructure.Services
+namespace GamePlay
 {
     public class GameCell : MonoBehaviour
     {
