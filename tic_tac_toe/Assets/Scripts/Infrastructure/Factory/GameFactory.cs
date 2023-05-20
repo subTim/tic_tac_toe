@@ -14,8 +14,8 @@ namespace Infrastructure.Factory
         private readonly AssetsProvider _assetsProvider;
 
         public List<GameCell> Cells { get; set;}
-        public List<IProgressWriter> ProgressWriters { get; set; }
-        public List<IProgressWriter> ProgressReaders { get; set; }
+        public List<IProgressWriter> ProgressWriters { get; set; } = new List<IProgressWriter>();
+        public List<IProgressReader> ProgressReaders { get; set; } = new List<IProgressReader>();
         public WinScreen WinScreen { get; set; }
         public LooseScreen LooseScreen { get; set; }
 
@@ -36,7 +36,6 @@ namespace Infrastructure.Factory
         {
             LooseScreen = _assetsProvider.Instantiate(AssetsPath.LOOSE_SCREEN, false).GetComponent<LooseScreen>();
             WinScreen = _assetsProvider.Instantiate(AssetsPath.WIN_SCREEN, false).GetComponentInChildren<WinScreen>();
-            Debug.Log(WinScreen);
         }
 
         private void InitCells(GameObject gameBoard)
@@ -46,6 +45,8 @@ namespace Infrastructure.Factory
             foreach (var cell in Cells)
             {
                 cell.Construct(_staticData.Storage);
+                ProgressReaders.Add(cell);
+                ProgressWriters.Add(cell);
             }
         }
     }

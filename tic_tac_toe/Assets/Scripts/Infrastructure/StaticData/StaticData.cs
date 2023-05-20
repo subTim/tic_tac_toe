@@ -15,7 +15,6 @@ namespace Infrastructure.StaticData
         private void LoadSprites()
         {
             Storage = Resources.Load<SpritesStorage>(AssetsPath.SPRITE_STORAGE);
-            Debug.Log(Storage);
             Storage.Init();
         }
     }

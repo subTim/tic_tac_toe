@@ -1,10 +1,12 @@
 using System;
+using Data;
 using GamePlay;
 using GamePlay.Cells;
+using UnityEngine;
 
 namespace Infrastructure.Services
 {
-    public class GameStatusService : IDisposable, IService
+    public class GameStatusService : IDisposable, IService, IProgressReader, IProgressWriter
     {
         private readonly InputService _inputService;
         private readonly FieldChangesParser _changesParser;
@@ -23,6 +25,17 @@ namespace Infrastructure.Services
         public void ResetStep()
         {
             _step = GameStep.Cross;
+        }
+        
+        public void Read(Progress progress)
+        {
+            _step = (GameStep) progress.Step;
+        }
+
+        public void UpdateProgress(Progress progress)
+        {
+            
+            progress.Step = (int)_step;
         }
 
         private void Subscribe()

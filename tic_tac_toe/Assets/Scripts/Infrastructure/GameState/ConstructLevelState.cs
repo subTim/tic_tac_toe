@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using Data;
 using GamePlay;
 using Infrastructure.Factory;
 using Infrastructure.Services;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Infrastructure.GameState
@@ -18,14 +20,20 @@ namespace Infrastructure.GameState
         public void Enter()
         {
             Construct();
-            _serviceLocator.Single<GlobalStateMachine>().SetState<PlayingState>();
+            _serviceLocator.Single<GlobalStateMachine>().SetState<LoadProgressState>();
         }
 
         private void Construct()
         {
-            IGameFactory gameFactory = _serviceLocator.Single<IGameFactory>(); 
-            _serviceLocator.Single<InputService>().Construct(gameFactory.CreateField().GetComponent<GraphicRaycaster>());
+            IGameFactory gameFactory = _serviceLocator.Single<IGameFactory>();
+            GameObject gameField = gameFactory.CreateField();
+            _serviceLocator.Single<InputService>().Construct(gameField.GetComponent<GraphicRaycaster>());
+            
+            gameField.GetComponentInChildren<Button>().onClick.AddListener(() => _serviceLocator.Single<GlobalStateMachine>().SetState<SaveProgressState>());
             gameFactory.CreateScreens();
+            
+            gameFactory.ProgressReaders.Add(_serviceLocator.Single<GameStatusService>());
+            gameFactory.ProgressWriters.Add(_serviceLocator.Single<GameStatusService>());
             
             ConfigureWinLooseSystem();
         }

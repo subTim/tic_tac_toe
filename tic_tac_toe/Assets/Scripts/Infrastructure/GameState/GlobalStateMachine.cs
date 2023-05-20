@@ -24,9 +24,7 @@ namespace Infrastructure.GameState
         {
             if(_activeState != null)
                 TryExit(_activeState);
-            
-            
-            Debug.Log(typeof(TState));
+
             _activeState = _states[typeof(TState)];
             TryEnter(_activeState);
         }

@@ -1,3 +1,4 @@
+using Data;
 using GamePlay.Cells;
 using Infrastructure.Services;
 using Infrastructure.StaticData;
@@ -6,18 +7,39 @@ using UnityEngine.UI;
 
 namespace GamePlay
 {
-    public class GameCell : MonoBehaviour
+    public class GameCell : MonoBehaviour, IProgressReader, IProgressWriter
     {
         [SerializeField] private Image _image;
+        [SerializeField] private string _id;
         
         private CellStatus _status;
         private SpritesStorage _spriteStorage;
         public CellStatus Status => _status;
+        
 
         public void Construct(SpritesStorage sprites)
         {
             _spriteStorage = sprites;
             UpdateViewStatus();
+        }
+
+        public void UpdateProgress(Progress progress)
+        {
+            progress.CellsTable[_id] = _status;
+        }
+        
+        public void Read(Progress progress)
+        {
+            SetStatus(GetCellStatus(progress));
+        }
+
+        private CellStatus GetCellStatus(Progress progress)
+        {
+            if (progress.CellsTable.ContainsKey(_id))
+                return progress.CellsTable[_id];
+            
+            else
+                return CellStatus.Empty;
         }
 
         public void SetStatus(CellStatus status)

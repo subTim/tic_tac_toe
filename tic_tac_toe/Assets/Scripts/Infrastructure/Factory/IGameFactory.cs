@@ -13,7 +13,7 @@ namespace Infrastructure.Factory
         void CreateScreens();
         List<GameCell> Cells { get; set; }
         List<IProgressWriter> ProgressWriters { get; set; }
-        List<IProgressWriter> ProgressReaders { get; set; }
+        List<IProgressReader> ProgressReaders { get; set; }
         WinScreen WinScreen { get; set; }
         LooseScreen LooseScreen { get; set; }
     }
