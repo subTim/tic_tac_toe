@@ -1,6 +1,7 @@
 using Infrastructure.Services;
+using UnityEngine;
 
-namespace UnityEngine
+namespace Data
 {
     public class AssetsProvider : IService
     {

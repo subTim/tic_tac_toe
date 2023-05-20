@@ -1,11 +1,9 @@
-using System.Collections.Generic;
+using Data;
 using GamePlay;
 using Infrastructure.Factory;
 using Infrastructure.Scenes;
 using Infrastructure.Services;
 using Infrastructure.Services.UpdateSystem;
-using UnityEngine;
-using UnityEngine.UI;
 
 namespace Infrastructure.GameState
 {

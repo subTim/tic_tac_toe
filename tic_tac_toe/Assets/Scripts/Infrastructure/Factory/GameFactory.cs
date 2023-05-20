@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Data;
 using DefaultNamespace;
 using GamePlay;
 using Infrastructure.Services;
@@ -13,6 +14,8 @@ namespace Infrastructure.Factory
         private readonly AssetsProvider _assetsProvider;
 
         public List<GameCell> Cells { get; set;}
+        public List<IProgressWriter> ProgressWriters { get; set; }
+        public List<IProgressWriter> ProgressReaders { get; set; }
         public WinScreen WinScreen { get; set; }
         public LooseScreen LooseScreen { get; set; }
 
