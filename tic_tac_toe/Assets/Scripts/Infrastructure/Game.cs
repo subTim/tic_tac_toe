@@ -10,6 +10,7 @@ namespace Infrastructure
         private readonly IRoutineRunner _routineRunner;
         private readonly Updater _updater;
         public GlobalStateMachine StateMachine;
+        public ServiceLocator Locator;
         
         public Game(IRoutineRunner routineRunner, Updater updater)
         {
@@ -20,6 +21,8 @@ namespace Infrastructure
 
         private void ConstructStateMachine()
         {
+            Locator = ServiceLocator.Container;
+            
             StateMachine = new GlobalStateMachine();
             StateMachine.AddState(new BootstrapState(ServiceLocator.Container, _updater, StateMachine, new SceneLoader(_routineRunner)));
             StateMachine.AddState(new ConstructLevelState(ServiceLocator.Container));

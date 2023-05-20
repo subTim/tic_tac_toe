@@ -1,4 +1,6 @@
+using System;
 using Infrastructure.GameState;
+using Infrastructure.Services;
 using Infrastructure.Services.UpdateSystem;
 using UnityEngine;
 
@@ -6,6 +8,8 @@ namespace Infrastructure
 {
     public class Bootstrapper : MonoBehaviour, IRoutineRunner
     {
+        private Game _game;
+        
         private void Awake()
         {
             DontDestroyOnLoad(this);
@@ -15,8 +19,13 @@ namespace Infrastructure
         private void Bootstrap()
         {
             Updater updater = gameObject.AddComponent<Updater>();
-            Game game = new Game(this, updater);
-            game.StateMachine.SetState<BootstrapState>();
+            _game = new Game(this, updater);
+            _game.StateMachine.SetState<BootstrapState>();
+        }
+
+        private void OnDestroy()
+        {
+            _game.Locator.Single<Disposer>().DisposeAll();
         }
     }
 }
