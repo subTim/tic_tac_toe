@@ -23,6 +23,5 @@ namespace Data
             prefab.SetActive(active);
             return Object.Instantiate(prefab);
         }
-
     }
 }

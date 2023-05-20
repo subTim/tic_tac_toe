@@ -1,4 +1,3 @@
-using Data;
 using GamePlay.Cells;
 using Infrastructure.Factory;
 using Infrastructure.GameState;

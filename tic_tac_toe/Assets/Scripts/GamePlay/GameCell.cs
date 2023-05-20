@@ -33,15 +33,6 @@ namespace GamePlay
             SetStatus(GetCellStatus(progress));
         }
 
-        private CellStatus GetCellStatus(Progress progress)
-        {
-            if (progress.CellsTable.ContainsKey(_id))
-                return progress.CellsTable[_id];
-            
-            else
-                return CellStatus.Empty;
-        }
-
         public void SetStatus(CellStatus status)
         {
             _status = status;
@@ -61,6 +52,15 @@ namespace GamePlay
             }
             
             UpdateViewStatus();
+        }
+
+        private CellStatus GetCellStatus(Progress progress)
+        {
+            if (progress.CellsTable.ContainsKey(_id))
+                return progress.CellsTable[_id];
+            
+            else
+                return CellStatus.Empty;
         }
 
         private void UpdateViewStatus()
