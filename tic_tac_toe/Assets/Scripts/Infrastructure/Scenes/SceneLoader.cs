@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using AsyncOperation = UnityEngine.AsyncOperation;
 
@@ -22,7 +23,7 @@ namespace Infrastructure.Scenes
                 onLoaded?.Invoke();
                 yield break;
             }
-      
+            
             AsyncOperation waitNextScene = SceneManager.LoadSceneAsync(nextScene);
 
             while (!waitNextScene.isDone)

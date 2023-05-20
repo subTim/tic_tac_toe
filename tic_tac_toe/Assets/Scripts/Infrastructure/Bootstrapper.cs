@@ -16,7 +16,7 @@ namespace Infrastructure
         {
             Updater updater = gameObject.AddComponent<Updater>();
             Game game = new Game(this, updater);
-            game.StateMachine.SetState<PlayingState>();
+            game.StateMachine.SetState<BootstrapState>();
         }
     }
 }

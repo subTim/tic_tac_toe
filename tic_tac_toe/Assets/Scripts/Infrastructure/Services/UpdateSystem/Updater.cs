@@ -6,7 +6,7 @@ namespace Infrastructure.Services.UpdateSystem
 {
     public class Updater : MonoBehaviour, IService
     {
-        private List<IUpdatible> _updatibles;
+        private List<IUpdatible> _updatibles = new();
         
         public bool IsEnableToUpdate { get; set;}
 

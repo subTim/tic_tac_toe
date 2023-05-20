@@ -1,13 +1,19 @@
 using System;
 using System.Collections.Generic;
+using Infrastructure.Services;
+using UnityEngine;
 
 namespace Infrastructure.GameState
 {
-    public class GlobalStateMachine
+    public class GlobalStateMachine : IService
     {
         private Dictionary<Type, IState> _states = new();
         private IState _activeState;
 
+        public bool CompareState<TState>()
+        {
+            return _activeState.GetType() == typeof(TState);
+        }
 
         public void AddState<TState>(TState state) where TState : IState
         {
@@ -31,8 +37,8 @@ namespace Infrastructure.GameState
 
         private void TryEnter<TState>(TState state) where TState : class
         {
-            if (state is IExitableState exitableState)
-                exitableState.Exit();
+            if (state is IEnterableState enterableState)
+                enterableState.Enter();
         }
     }
 }

@@ -2,7 +2,6 @@ using Infrastructure.GameState;
 using Infrastructure.Scenes;
 using Infrastructure.Services;
 using Infrastructure.Services.UpdateSystem;
-using Unity.VisualScripting;
 
 namespace Infrastructure
 {
@@ -23,6 +22,7 @@ namespace Infrastructure
         {
             StateMachine = new GlobalStateMachine();
             StateMachine.AddState(new BootstrapState(ServiceLocator.Container, _updater, StateMachine, new SceneLoader(_routineRunner)));
+            StateMachine.AddState(new ConstructLevelState(ServiceLocator.Container));
             StateMachine.AddState(new PlayingState(_updater));
         }
     }
