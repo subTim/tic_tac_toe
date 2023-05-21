@@ -28,62 +28,32 @@ namespace Infrastructure.GameState
             _sceneLoader.Load(SceneNames.PLAYING_SCENE, SetNext);
         }
 
-        private void RegisterServices()
-        {
-            _serviceLocator.RegisterSingle<Updater>(_updater);
-            _serviceLocator.RegisterSingle<StaticData.StaticDataService>(new StaticData.StaticDataService());
-            _serviceLocator.RegisterSingle<AssetsProvider>(new AssetsProvider());
-            _serviceLocator.RegisterSingle<IGameFactory>(new GameFactory(_serviceLocator));
-            _serviceLocator.RegisterSingle<InputService>(new InputService());
-            InitLooseWinSystem();
-            _serviceLocator.RegisterSingle<GameStatusService>(new GameStatusService(_serviceLocator.Single<InputService>(), _serviceLocator.Single<FieldChangesParser>()));
-            _serviceLocator.RegisterSingle<Restarter>(new Restarter(_machine, _serviceLocator.Single<IGameFactory>(), _serviceLocator.Single<GameStatusService>()));
-            _serviceLocator.RegisterSingle(_machine);
-            _serviceLocator.RegisterSingle<Disposer>(new Disposer());
-            _updater.Register(_serviceLocator.Single<InputService>());
-            _serviceLocator.RegisterSingle<SaveLoadService>(new SaveLoadService(new Progress()));
-            
-            CreateLoadState();
-            CreateSaveState();
-            CreateWinState();
-            CreateLooseState();
-        }
-
-        private void CreateSaveState()
-        {
-            _machine.AddState<SaveProgressState>(new SaveProgressState(_serviceLocator.Single<SaveLoadService>(),
-                _serviceLocator.Single<IGameFactory>(), _serviceLocator.Single<GlobalStateMachine>()));
-        }
-
-        private void CreateLoadState()
-        {
-            _machine.AddState<LoadProgressState>(new LoadProgressState(_serviceLocator.Single<SaveLoadService>(),
-                _serviceLocator.Single<IGameFactory>(), _serviceLocator.Single<GlobalStateMachine>()));
-        }
-
-        private void InitLooseWinSystem()
-        {
-            _serviceLocator.RegisterSingle<Winner>(new Winner(_machine));
-            _serviceLocator.RegisterSingle<Looser>(new Looser(_machine));
-            _serviceLocator.RegisterSingle<FieldChangesParser>(new FieldChangesParser(
-                _serviceLocator.Single<Winner>(), _serviceLocator.Single<Looser>()));
-        }
-        
-        private void CreateWinState()
-        {
-            _machine.AddState(new WinState(ServiceLocator.Container.Single<Restarter>(),
-                ServiceLocator.Container.Single<IGameFactory>(), ServiceLocator.Container.Single<GameStatusService>()));
-        }
-
-        private void CreateLooseState()
-        {
-            _machine.AddState(new LooseState(ServiceLocator.Container.Single<Restarter>(),
-                ServiceLocator.Container.Single<IGameFactory>()));
-        }
-
         private void SetNext()
         {
             _machine.SetState<ConstructLevelState>();
+        }
+
+        private void RegisterServices()
+        {
+            _serviceLocator.RegisterSingle<StaticData.StaticDataService>(new StaticData.StaticDataService());
+            
+            _serviceLocator.RegisterSingle<AssetsProvider>(new AssetsProvider());
+            _serviceLocator.RegisterSingle<Disposer>(new Disposer());
+
+            _serviceLocator.RegisterSingle<IGameFactory>(new GameFactory(_serviceLocator));
+            _serviceLocator.RegisterSingle<InputService>(new InputService());
+
+            _updater.Register(_serviceLocator.Single<InputService>());
+            _serviceLocator.RegisterSingle<SaveLoadService>(new SaveLoadService(new Progress()));
+
+            _serviceLocator.RegisterSingle<Winner>(new Winner(_machine));
+            _serviceLocator.RegisterSingle<Looser>(new Looser(_machine));
+            _serviceLocator.RegisterSingle<FieldChangesParser>(new FieldChangesParser(_serviceLocator.Single<Winner>(), _serviceLocator.Single<Looser>()));
+            _serviceLocator.RegisterSingle<GameStatusService>(new GameStatusService(_serviceLocator.Single<InputService>(), _serviceLocator.Single<FieldChangesParser>()));
+            _serviceLocator.RegisterSingle<Restarter>(new Restarter(_machine, _serviceLocator.Single<IGameFactory>(), _serviceLocator.Single<GameStatusService>()));
+            _serviceLocator.RegisterSingle<IUiFactory>(new UiFactory(_serviceLocator));
+
+            _serviceLocator.Single<IStatesFactory>().CreateSubStates();
         }
     }
 }

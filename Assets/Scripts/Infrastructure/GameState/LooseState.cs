@@ -5,25 +5,21 @@ namespace Infrastructure.GameState
 {
     public class LooseState : IEnterableState, IExitableState
     {
-        private readonly Restarter _restarter;
-        private readonly IGameFactory _gameFactory;
+        private readonly IUiFactory _uiFactory;
 
-        public LooseState(Restarter restarter, IGameFactory gameFactory)
+        public LooseState(IUiFactory uiFactory)
         {
-            _restarter = restarter;
-            _gameFactory = gameFactory;
+            _uiFactory = uiFactory;
         }
         
         public void Enter()
         {
-            _gameFactory.LooseScreen.gameObject.SetActive(true);
-            _gameFactory.LooseScreen.RestartButton.onClick.AddListener(_restarter.Restart);
+            _uiFactory.LooseScreen.Show();
         }
 
         public void Exit()
         {
-            _gameFactory.LooseScreen.gameObject.SetActive(false);
-            _gameFactory.LooseScreen.RestartButton.onClick.RemoveAllListeners();
+            _uiFactory.LooseScreen.Hide();
         }
     }
 }

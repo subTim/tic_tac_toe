@@ -1,5 +1,5 @@
+using Infrastructure.Factory;
 using Infrastructure.GameState;
-using Infrastructure.Scenes;
 using Infrastructure.Services;
 using Infrastructure.Services.UpdateSystem;
 
@@ -9,6 +9,8 @@ namespace Infrastructure
     {
         private readonly IRoutineRunner _routineRunner;
         private readonly Updater _updater;
+        private StatesFactory _statesFactory;
+        
         public GlobalStateMachine StateMachine;
         public ServiceLocator Locator;
         
@@ -16,17 +18,22 @@ namespace Infrastructure
         {
             _routineRunner = routineRunner;
             _updater = updater;
+            
             ConstructStateMachine();
         }
 
         private void ConstructStateMachine()
         {
             Locator = ServiceLocator.Container;
-            
             StateMachine = new GlobalStateMachine();
-            StateMachine.AddState(new BootstrapState(ServiceLocator.Container, _updater, StateMachine, new SceneLoader(_routineRunner)));
-            StateMachine.AddState(new ConstructLevelState(ServiceLocator.Container));
-            StateMachine.AddState(new PlayingState(_updater));
+            
+            Locator.RegisterSingle(StateMachine);
+            Locator.RegisterSingle(_updater);
+            Locator.RegisterSingle(_routineRunner);
+            
+            _statesFactory = new StatesFactory(Locator);
+            Locator.RegisterSingle<IStatesFactory>(_statesFactory);
+            _statesFactory.CreateMainStates();
         }
     }
 }

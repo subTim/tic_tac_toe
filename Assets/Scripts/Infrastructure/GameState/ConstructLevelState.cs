@@ -25,11 +25,11 @@ namespace Infrastructure.GameState
         private void Construct()
         {
             IGameFactory gameFactory = _serviceLocator.Single<IGameFactory>();
-            GameObject gameField = gameFactory.CreateField();
-            _serviceLocator.Single<InputService>().Construct(gameField.GetComponent<GraphicRaycaster>());
             
+            GameObject gameField = gameFactory.CreateField();
+            _serviceLocator.Single<IUiFactory>().CreateScreens();
+            _serviceLocator.Single<InputService>().Construct(gameField.GetComponent<GraphicRaycaster>());
             gameField.GetComponentInChildren<Button>().onClick.AddListener(() => _serviceLocator.Single<GlobalStateMachine>().SetState<SaveProgressState>());
-            gameFactory.CreateScreens();
             
             gameFactory.ProgressReaders.Add(_serviceLocator.Single<GameStatusService>());
             gameFactory.ProgressWriters.Add(_serviceLocator.Single<GameStatusService>());

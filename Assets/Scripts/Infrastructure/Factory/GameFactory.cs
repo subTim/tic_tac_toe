@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Data;
-using DefaultNamespace;
 using GamePlay;
 using Infrastructure.Services;
 using UnityEngine;
@@ -16,8 +15,6 @@ namespace Infrastructure.Factory
         public List<GameCell> Cells { get; set;}
         public List<IProgressWriter> ProgressWriters { get; set; } = new List<IProgressWriter>();
         public List<IProgressReader> ProgressReaders { get; set; } = new List<IProgressReader>();
-        public WinScreen WinScreen { get; set; }
-        public LooseScreen LooseScreen { get; set; }
 
         public GameFactory(ServiceLocator serviceLocator)
         {
@@ -31,13 +28,7 @@ namespace Infrastructure.Factory
             InitCells(gameBoard);
             return gameBoard;
         }
-
-        public void CreateScreens()
-        {
-            LooseScreen = _assetsProvider.Instantiate(AssetsPath.LOOSE_SCREEN, false).GetComponent<LooseScreen>();
-            WinScreen = _assetsProvider.Instantiate(AssetsPath.WIN_SCREEN, false).GetComponentInChildren<WinScreen>();
-        }
-
+        
         private void InitCells(GameObject gameBoard)
         {
             Cells = gameBoard.GetComponentsInChildren<GameCell>().ToList();
